@@ -72,49 +72,13 @@ const boards = range(numberOfBoards).map(i => {
 
 // mark
 numbers.split(',').some(n => {
-  console.log('mark', parseInt(n))
   return boards.some(b => {
     b.mark(parseInt(n))
     if (b.hasBingo()) {
-      let result = sum(b.getUnmarked())
-      console.log('bingo!!!', result, n, result * n)
+      const sumOfUnmarked = sum(b.getUnmarked())
+      console.log('bingo', sumOfUnmarked * n)
       return true
     }
     return false
   })
 })
-
-
-// console.log(boards[0])
-
-// const b = new Board(
-//   [
-//     [14, 21, 17, 24,  4], 
-//     [10, 16, 15,  9, 19],
-//     [18,  8, 23, 26, 20],
-//     [22, 11, 13,  6,  5],
-//     [ 2,  0, 12,  3,  7]
-//   ])
-
-//  b.mark(7)
-//    b.mark(4)
-// //     b.mark(9)
-// //       b.mark(5)
-// //         b.mark(11)
-// //           b.mark(17)
-// //             b.mark(23)
-// //               b.mark(2)
-// //                 b.mark(0)
-// //                   b.mark(14)
-// //                     b.mark(21)
-// //                       b.mark(24)
-
-//  console.log(b)
-
-//  console.log(' 8  2 23  4 24'.trim().replace(/\s+/g, ',').split(',').map(x => parseInt(x)))
-
-// // console.log(sum(b.getUnmarked()))
-
-
-// // console.log('Numbers', numbers)
-
