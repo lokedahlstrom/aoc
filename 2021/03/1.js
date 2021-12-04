@@ -16,6 +16,7 @@ const range = n => [...Array(n).keys()]
 let acc = range(length)
 let oneFreq = acc.map(x => 0)
 
+// invert the bits. the mask depends on the number of bits
 const complement = l => n => {
   const mask = 2**l - 1
   return (n & mask) ^ mask

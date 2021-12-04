@@ -7,6 +7,8 @@ const read = file => {
 
 const lines = read('./data5')
 
+// sure, there must be a built in feature in js
+// to convert binary to decimal...
 const binToDec = s => {
   let result = 0
   s.split('').reverse().forEach((n, i) => {
