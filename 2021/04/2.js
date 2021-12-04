@@ -6,8 +6,8 @@ const read = file => {
 }
 
 const lines = read('./data')
-
 const numbers = lines[0]
+
 const range = n => [...Array(n).keys()]
 const sum = v => v.reduce((acc, x) => acc + x, 0)
 const empty = v => v === null || v === undefined || v === ''
@@ -60,13 +60,24 @@ class Board {
 }
 
 // read the boards
-const nonEmptyBoardLines = lines.slice(2).filter(notEmpty)
+const nonEmptyBoardLines = lines
+  .slice(2)         // skip line with called numbers and first blank line
+  .filter(notEmpty) // remove all empty lines
+
 const numberOfBoards = nonEmptyBoardLines.length / 5
+
 const boards = range(numberOfBoards).map(i => {
+  // extract the five rows for the current board
   const start = i * 5
   const end = start + 5
   const lines = nonEmptyBoardLines.slice(start, end)
-  const numbers = lines.map(x => x.trim().replace(/\s+/g, ',').split(',').map(x => parseInt(x)))
+
+  const numbers = lines.map(x => x
+    .trim()                 // remove heading blanks
+    .replace(/\s+/g, ',')   // replace whitespace with ,
+    .split(',')             // split numbers on ,
+    .map(x => parseInt(x))) // convert to integer
+
   return new Board(numbers)
 })
 
@@ -74,8 +85,9 @@ let won = new Set()
 let orderWon = []
 let lastCalled = undefined
 
-// mark
+// call the numbers
 numbers.split(',').map(n => {
+  // ignore boards that already have bingo
   return boards.filter(b => !won.has(b)).map(b => {
     b.mark(parseInt(n))
     if (b.hasBingo()) {

@@ -70,7 +70,8 @@ const boards = range(numberOfBoards).map(i => {
   return new Board(numbers)
 })
 
-// mark
+// call the numbers
+// first to get bingo will terminate the algorithm (thanks to some)
 numbers.split(',').some(n => {
   return boards.some(b => {
     b.mark(parseInt(n))
