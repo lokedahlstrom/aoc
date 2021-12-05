@@ -6,4 +6,5 @@ const solve = data => {
   return `Result: ${result}`
 }
 
-console.log(solve(read('./data')))
+console.log("Test", solve(read('./test')))
+console.log("Data", solve(read('./data')))
