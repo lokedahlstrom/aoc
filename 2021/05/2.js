@@ -76,8 +76,6 @@ const solve = data => {
   // fill matrix with lines
   data.map(addToMatrix(matrix))
 
-  console.info(matrix)
-
   // count > 1
   let result = 0
   matrix.forEach(row => row.forEach(c => {
