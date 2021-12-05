@@ -19,7 +19,6 @@ const vertical = line => line[0] === line[2]
 const horizontal = line => line[1] === line[3]
 
 const addToMatrix = matrix => line => {
-  console.log('adding', line)
   if (horizontal(line)) {
     const row = matrix[line[1]]
     const startx = Math.min(line[0], line[2])
@@ -31,7 +30,6 @@ const addToMatrix = matrix => line => {
   }
   else {
     const col = line[0]
-    console.log('v', line)
     const starty = Math.min(line[1], line[3])
     const endy = Math.max(line[1], line[3])
     for (let y = starty; y <= endy; ++y) {
@@ -69,11 +67,6 @@ const solve = data => {
       ++result
     }
   }))
-
-  matrix.forEach(line => {
-    console.log(line)
-  })
-  //console.log(maxX, maxY)
 
   return `Result: ${result}`
 }
