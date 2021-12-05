@@ -3,7 +3,6 @@ import { read } from '../helpers'
 // helpers
 const commaSplit = d => d.split(',')
 const toInt = s => parseInt(s)
-const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x)
 const or = (predLeft, predRight) => subject => predLeft(subject) || predRight(subject)
 const create2dMatrix = (x, y) => Array.from(Array(y), () => new Array(x))
 
