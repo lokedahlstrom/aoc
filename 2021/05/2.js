@@ -5,7 +5,7 @@ const commaSplit = d => d.split(',')
 const toInt = s => parseInt(s)
 const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x)
 const or = (predLeft, predRight) => subject => predLeft(subject) || predRight(subject)
-const create2dMatrix = (x, y) => Array.from(Array(y), () => new Array(x))
+const create2dMatrix = (x, y) => Array(y).fill().map(() => Array(x).fill('.'));
 
 // replace ' -> ' with comma
 const toCommaDelimited = data => data.map(l => l.replace(/\W\-\>\W/g, ','))
@@ -18,8 +18,11 @@ const vertical = line => line[0] === line[2]
 // horizontal line filter
 const horizontal = line => line[1] === line[3]
 
+const cellEmpty = v => v === undefined || v === null || v === '.'
+
 const incOverlap = (matrix, y, x) => {
-  let cur = matrix[y][x] || 0
+  const c = matrix[y][x]
+  let cur = cellEmpty(c) ? 0 : c
   matrix[y][x] = ++cur
 }
 
@@ -75,6 +78,13 @@ const solve = data => {
   
   // fill matrix with lines
   data.map(addToMatrix(matrix))
+
+  // matrix.forEach(l => {
+  //   l.forEach(c => {
+  //     process.stdout.write(String(c))
+  //   })
+  //   console.log()
+  // })
 
   // count > 1
   let result = 0
