@@ -1,7 +1,7 @@
 import { read, ints, range, sum } from '../helpers'
 
 const solve = data => {
-  const pool = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  const pool = Array(9).fill(0)
 
   // set the frequency of each generation
   ints(data).flat().forEach(gen => {
@@ -10,17 +10,14 @@ const solve = data => {
 
   const days = 256
   range(days).forEach(d => {
-    const atZero = pool[0]
-    
-    pool[0] = pool[1]
-    pool[1] = pool[2]
-    pool[2] = pool[3]
-    pool[3] = pool[4]
-    pool[4] = pool[5]
-    pool[5] = pool[6] 
-    pool[6] = pool[7] + atZero
-    pool[7] = pool[8]
-    pool[8] = atZero
+    const add = pool[0]
+
+    for (let i = 0; i < pool.length - 1; ++i) {
+      pool[i] = pool[i + 1]
+    }
+
+    pool[6] += add
+    pool[8] = add
   })
 
   const result = sum(pool)
