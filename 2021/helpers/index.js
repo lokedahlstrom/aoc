@@ -6,11 +6,15 @@ export const read = file => {
 }
 
 export const _ints = s => s
-  .replace(/[\D]/g, ' ')  // replace non numeric with space
-  .replace(/\W+/g, ' ')   // remove repeated whitespaces
-  .split(' ')             // make array
-  .map(d => parseInt(d))  // make ints
-  .filter(d => !isNaN(d)) // remove any invalid numbers
+  .split('\n')
+  .map(line => line
+    .replace(/[\D]/g, ' ')  // replace non numeric with space
+    .replace(/\W+/g, ' ')   // remove repeated whitespaces
+    .split(' ')             // make array
+    .map(d => parseInt(d))  // make ints
+    .filter(d => !isNaN(d)) // remove any invalid numbers
+  )
+  .filter(a => a.length > 0)
 
 export const readInts = file => read(file).map(_ints).flat()
 
