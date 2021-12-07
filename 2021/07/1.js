@@ -1,4 +1,4 @@
-import { readInts, ints, range, sum, int_sort } from '../helpers'
+import { readInts, int_sort } from '../helpers'
 
 const median = arr => {
   const local = int_sort(arr)
