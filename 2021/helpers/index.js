@@ -15,13 +15,16 @@ export const _ints = s => s
     .filter(d => !isNaN(d)) // remove any invalid numbers
   )
   .filter(a => a.length > 0)
+  .flat()
 
 export const readInts = file => read(file).map(_ints).flat()
 
 export const range = n => [...Array(n).keys()]
 export const sum = v => v.reduce((acc, x) => acc + x, 0)
+// todo: include || v.length === 0 for arrays
 export const empty = v => v === null || v === undefined || v === ''
 export const notEmpty = v => !empty(v)
+// to be deprecated by _ints
 export const ints = data => data.map(line => line.split(',').map(d => parseInt(d)))
 
 export const arraysEqual = (a, b) => {
@@ -39,3 +42,5 @@ export const arraysEqual = (a, b) => {
   }
   return true;
 }
+
+export const int_sort = v => [...v].sort((a, b) => a - b)
