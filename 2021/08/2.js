@@ -8,15 +8,18 @@ const minus = (a, b) => new Set([...a].filter(x => !b.has(x)))
 const eqSet = (a, b) => {
   if (a.size !== b.size)
     return false
-  for (var x of a) if (!b.has(x)) return false;
+  for (var x of a) {
+    if (!b.has(x)) 
+      return false
+  }
   return true;
 }
 
 const isSuperset = (set, subset) => {
   for (let elem of subset) {
-      if (!set.has(elem)) {
-          return false
-      }
+    if (!set.has(elem)) {
+      return false
+    }
   }
   return true
 }
@@ -54,7 +57,6 @@ const decodeRow = d => {
 
   const withFive = allPatternsWithLength(5)
   lookup[3] = withFive.filter(x => isSuperset(x, lookup[1]))[0]
-  //den av 25 som har (8 minus 9) som delmängd är 2
   const eightMinusNine = minus(lookup[8], lookup[9])
   lookup[2] = withFive.filter(x => isSuperset(x, eightMinusNine))[0]
   lookup[5] = withFive.filter(x => x != lookup[3] && x != lookup[2])[0]
