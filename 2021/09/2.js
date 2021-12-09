@@ -25,7 +25,8 @@ const isLowest = (matrix, rows, rowLength) => (x, y) => {
 const p2s = v => JSON.stringify(v)
 const has = (s, v) => s.has(p2s(v))
 
-const oob = (matrix, rows, rowLength) => (x, y) => {
+// out of bounds check
+const oob = (rows, rowLength) => (x, y) => {
   if (y < 0 || y >= rows)
     return true
   if (x < 0 || x >= rowLength)
@@ -59,7 +60,7 @@ const solve = data => {
   const rowLength = first(data).length
 
   const mLowest = isLowest(matrix, rows, rowLength)
-  const moob = oob(matrix, rows, rowLength)
+  const moob = oob(rows, rowLength)
 
   let basins = []
   
@@ -75,7 +76,8 @@ const solve = data => {
   }
 
   basins.sort((l, r) => r.size - l.size)
-  const result = basins[0].size * basins[1].size * basins[2].size
+  const result = basins.slice(0, 3).reduce((acc, b) => acc * b.size, 1)
+  
   return `Result: ${result}`
 }
 
