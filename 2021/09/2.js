@@ -1,81 +1,76 @@
 import { read } from '../helpers'
 
 const first = v => v[0]
-
-const get = (matrix, rows, rowLength) => (x,y) => {
-  if (y < 0 || y >= rows)
-    return 99999
-  if (x < 0 || x >= rowLength)
-    return 99999
-  return matrix[y][x]
-}
-
-const isLowest = (matrix, rows, rowLength) => (x, y) => {
-  const mget = get(matrix, rows, rowLength)
-
-  const P = mget(x, y)
-  const N = mget(x, y-1)
-  const W = mget(x-1, y)
-  const E = mget(x+1, y)
-  const S = mget(x, y+1)
-
-  return P < Math.min(N, W, E, S)
-}
-
 const p2s = v => JSON.stringify(v)
-const has = (s, v) => s.has(p2s(v))
-
-// out of bounds check
-const oob = (rows, rowLength) => (x, y) => {
-  if (y < 0 || y >= rows)
-    return true
-  if (x < 0 || x >= rowLength)
-    return true
-  return false
-}
-
-const visit = (matrix, visited, basin, moob) => (x, y) => {
-  const isVisited = has(visited, [x,y])
-  if (moob(x, y) || isVisited) {
-    return
-  }
-
-  visited.add(p2s([x,y]))
-  const v = matrix[y][x]
-  if (v === 9)
-    return
-  
-  basin.add(p2s([x,y]))
-
-  visit(matrix, visited, basin, moob)(x, y-1)
-  visit(matrix, visited, basin, moob)(x-1, y)
-  visit(matrix, visited, basin, moob)(x+1, y)
-  visit(matrix, visited, basin, moob)(x, y+1)
+const set = {
+  has: (s, v) => s.has(p2s(v)),
+  add: (s, p) => s.add(p2s(p))
 }
 
 const solve = data => {
   const matrix = data.map(row => row.split('').map(s => parseInt(s)))
-  
   const rows = data.length
   const rowLength = first(data).length
-
-  const mLowest = isLowest(matrix, rows, rowLength)
-  const moob = oob(rows, rowLength)
+  const MAX = 9
 
   let basins = []
+  let visited = new Set()
+
+  const get = (x, y) => {
+    if (y < 0 || y >= rows)
+      return MAX
+    if (x < 0 || x >= rowLength)
+      return MAX
+    return matrix[y][x]
+  }
+  
+  const isLowest = (x, y) => {
+    const P = get(x, y)
+    const N = get(x, y-1)
+    const W = get(x-1, y)
+    const E = get(x+1, y)
+    const S = get(x, y+1)
+  
+    return P < Math.min(N, W, E, S)
+  }
+  
+  // out of bounds check
+  const oob = (x, y) => {
+    if (y < 0 || y >= rows)
+      return true
+    if (x < 0 || x >= rowLength)
+      return true
+    return false
+  }
+  
+  const expandBasin = (basin, x, y) => {
+    if (oob(x, y) || set.has(visited, [x,y]))
+      return
+  
+    set.add(visited, [x,y])
+    const v = matrix[y][x]
+    if (v === MAX)
+      return
+    
+    set.add(basin, [x,y])
+
+    expandBasin(basin, x, y-1) // N
+    expandBasin(basin, x-1, y) // W
+    expandBasin(basin, x+1, y) // E
+    expandBasin(basin, x, y+1) // S
+  }
   
   for (let r = 0; r < rows; ++r) {
     for (let c = 0; c < rowLength; ++c) {
-      if (mLowest(c, r)) {
-        let visited = new Set()
+      if (isLowest(c, r)) {
         let basin = new Set()
-        visit(matrix, visited, basin, moob)(c,r)
+        expandBasin(basin, c, r)
         basins.push(basin)
       }
     }
   }
 
-  basins.sort((l, r) => r.size - l.size)
+  basins.sort((l, r) => r.size - l.size) // sort largest to lowest
   const result = basins.slice(0, 3).reduce((acc, b) => acc * b.size, 1)
   
   return `Result: ${result}`
