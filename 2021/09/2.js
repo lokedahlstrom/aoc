@@ -6,6 +6,8 @@ const set = {
   has: (s, v) => s.has(p2s(v)),
   add: (s, p) => s.add(p2s(p))
 }
+const lens = prop => o => o[prop]
+const multiplyOver = lens => v => v.reduce((acc, x) => acc * lens(x), 1)
 
 const solve = data => {
   const matrix = data.map(row => row.split('').map(s => parseInt(s)))
@@ -70,8 +72,11 @@ const solve = data => {
     }
   }
 
-  basins.sort((l, r) => r.size - l.size) // sort largest to lowest
-  const result = basins.slice(0, 3).reduce((acc, b) => acc * b.size, 1)
+  const size = lens('size')
+  const multSize = multiplyOver(size)
+  
+  basins.sort((l, r) => size(r) - size(l)) // sort largest to lowest
+  const result = multSize(basins.slice(0, 3))
   
   return `Result: ${result}`
 }
