@@ -59,17 +59,13 @@ const solve = data => {
   const rowLength = first(data).length
 
   const mLowest = isLowest(matrix, rows, rowLength)
+  const moob = oob(matrix, rows, rowLength)
 
   let basins = []
   
-  const moob = oob(matrix, rows, rowLength)
-  
-  let lowest = []
   for (let r = 0; r < rows; ++r) {
     for (let c = 0; c < rowLength; ++c) {
       if (mLowest(c, r)) {
-        lowest.push(matrix[r][c])
-
         let visited = new Set()
         let basin = new Set()
         visit(matrix, visited, basin, moob)(c,r)
