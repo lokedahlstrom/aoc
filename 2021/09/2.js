@@ -73,10 +73,10 @@ const solve = data => {
   }
 
   const size = lens('size')
-  const multSize = multiplyOver(size)
+  const multiplySize = multiplyOver(size)
   
   basins.sort((l, r) => size(r) - size(l)) // sort largest to lowest
-  const result = multSize(basins.slice(0, 3))
+  const result = multiplySize(basins.slice(0, 3))
   
   return `Result: ${result}`
 }
