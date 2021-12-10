@@ -1,11 +1,4 @@
-import { readFileSync } from 'fs'
-
-const read = file => {
-  const text = readFileSync(file).toString('utf-8')
-  return text.split('\n')
-}
-
-const lines = read('./data5')
+import { read } from '../helpers'
 
 // sure, there must be a built in feature in js
 // to convert binary to decimal...
@@ -44,19 +37,25 @@ const leastFrequent = bit => data => {
   return data.filter(nthBitNotSet(bit))
 }
 
-const calcRating = criteria => () => {
-  let bit = -1
-  let candidates = criteria(++bit)(lines)
-  while (candidates.length > 1) {
-    candidates = criteria(++bit)(candidates)
+const solve = data => {
+  const calcRating = criteria => () => {
+    let bit = -1
+    let candidates = criteria(++bit)(data)
+    while (candidates.length > 1) {
+      candidates = criteria(++bit)(candidates)
+    }
+    return candidates[0]
   }
-  return candidates[0]
+  
+  const getOxygenGeneratorRating = calcRating(mostFrequent)
+  const getCO2ScrubberRating = calcRating(leastFrequent)
+  
+  const oxy = getOxygenGeneratorRating()
+  const co2 = getCO2ScrubberRating()
+  
+  const result = binToDec(oxy) * binToDec(co2)
+  return `Result: ${result}`
 }
 
-const getOxygenGeneratorRating = calcRating(mostFrequent)
-const getCO2ScrubberRating = calcRating(leastFrequent)
-
-const oxy = getOxygenGeneratorRating()
-const co2 = getCO2ScrubberRating()
-
-console.log('life support rating:', binToDec(oxy) * binToDec(co2))
+console.log("Test", solve(read('./test')))
+console.log("Data", solve(read('./data')))
