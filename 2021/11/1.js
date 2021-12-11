@@ -71,4 +71,4 @@ const solve = data => {
 }
 
 console.log("Test", solve(read('./test').map(splitInt)))
-console.log("Test", solve(read('./data').map(splitInt)))
+console.log("Data", solve(read('./data').map(splitInt)))
