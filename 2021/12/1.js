@@ -33,8 +33,6 @@ class Graph {
     this.recPaths(s, e, visited, pathlist, complete)
   }
 
-
-
   recPaths(s, e, visited, pathlist, complete) {
     if (s === e) {
       complete.push(pathlist)
@@ -62,7 +60,6 @@ const solve = data => {
     G.addEdge(first(line), last(line))
   })
   
-  //console.log(G)
   let complete = []
   G.paths('start', 'end', complete)
   const result = complete.length
