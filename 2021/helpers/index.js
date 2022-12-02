@@ -44,3 +44,7 @@ export const arraysEqual = (a, b) => {
 }
 
 export const int_sort = v => [...v].sort((a, b) => a - b)
+
+export const first = v => v[0]
+export const last = v => v[v.length - 1]
+export const isUpperCase = s => s === s.toUpperCase()

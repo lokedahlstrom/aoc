@@ -35,7 +35,7 @@ class Graph {
 
   recPaths(s, e, visited, pathlist, complete) {
     if (s === e) {
-      complete.push(pathlist)
+      complete.push([...pathlist])
       return
     }
 
@@ -63,10 +63,13 @@ const solve = data => {
   let complete = []
   G.paths('start', 'end', complete)
   const result = complete.length
+  complete.forEach(c => {
+    console.log(c.join(','))
+  })
   return `Result: ${result}`
 }
 
 console.log("Test", solve(read('./small-test').map(splits)))
-console.log("Test", solve(read('./medium-test').map(splits)))
-console.log("Test", solve(read('./large-test').map(splits)))
-console.log("Data", solve(read('./data').map(splits)))
+// console.log("Test", solve(read('./medium-test').map(splits)))
+// console.log("Test", solve(read('./large-test').map(splits)))
+// console.log("Data", solve(read('./data').map(splits)))
