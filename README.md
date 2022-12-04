@@ -9,6 +9,8 @@ Days are initialised using `template.js`
 
 ## Run the code
 
+Go to the day, and type `node -r esm 1.js` or use the helper:
+
 ```
 cd 01
 ../run 1.js
