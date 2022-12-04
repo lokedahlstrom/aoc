@@ -6,3 +6,10 @@ Run the code with `node -r esm n.js` where `n` is 1 or 2.
 Helper functions exist in `helpers/index.js` 
 
 Days are initialised using `template.js`
+
+## Run the code
+
+```
+cd 01
+../run 1.js
+```
