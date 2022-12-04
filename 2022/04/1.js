@@ -7,6 +7,7 @@ export const read = file => {
 
 const notEmpty = l => l.length
 const getInts = s => s.split('-').map(i => parseInt(i))
+const contains = (lf, lt, rf, rt) => lf >= rf && lt <= rt
 
 const solve = lines => {
   return lines
@@ -16,7 +17,7 @@ const solve = lines => {
       const [lf,lt] = getInts(l)
       const [rf, rt] = getInts(r)
 
-      if (lf >= rf && lt <= rt || rf >= lf && rt <= lt) {
+      if (contains(lf, lt, rf, rt) || contains(rf, rt, lf, lt)) {
         return res + 1
       }
       return res

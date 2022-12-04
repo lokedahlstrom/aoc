@@ -7,6 +7,7 @@ export const read = file => {
 
 const notEmpty = l => l.length
 const getInts = s => s.split('-').map(i => parseInt(i))
+const overlaps = (lf, lt, rf, rt) => lt >= rf && lt <= rt || lf >= rf && lf <= rt
 
 const solve = lines => {
   return lines
@@ -15,9 +16,8 @@ const solve = lines => {
       const [l,r] = cur.split(',')
       const [lf,lt] = getInts(l)
       const [rf, rt] = getInts(r)
-
-      // weeeell, gotta tidy this up some day :)
-      if (lt >= rf && lt <= rt || lf >= rf && lf <= rt || rt >= lf && rt <= lt || rf >= lf && rf <= lt) {
+      
+      if (overlaps(lf, lt, rf, rt) || overlaps(rf, rt, lf, lt)) {
         return res + 1
       }
       return res
