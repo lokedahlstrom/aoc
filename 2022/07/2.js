@@ -82,11 +82,6 @@ const solve = lines => {
 
   sum('/')
 
-  const result = Object.values(disk)
-      .map(d => d.size)
-      .filter(x => x <= 100000)
-      .reduce((acc, x) => acc + x, 0)
-
   const unusedSpace = 70000000 - disk['/'].size
   const toDelete = 30000000 - unusedSpace
   
