@@ -24,25 +24,10 @@ const solve = lines => {
 
   const calcResult = (arr, t) => Math.max(...arr) < t
 
-  const up = (x, y, t) => {
-    const part = columns[x].slice(0, y)
-    return calcResult(part, t)
-  }
-
-  const down = (x, y, t) => {
-    const part = columns[x].slice(y+1, rows)
-    return calcResult(part, t)
-  }
-
-  const left = (x, y, t) => {
-    const part = ints(lines[y]).slice(0, x)
-    return calcResult(part, t)
-  }
-
-  const right = (x, y, t) => {
-    const part = ints(lines[y]).slice(x+1, cols)
-    return calcResult(part, t)
-  }
+  const up = (x, y, t) => calcResult(columns[x].slice(0, y), t)
+  const down = (x, y, t) => calcResult(columns[x].slice(y+1, rows), t)
+  const left = (x, y, t) => calcResult(ints(lines[y]).slice(0, x), t)
+  const right = (x, y, t) => calcResult(ints(lines[y]).slice(x+1, cols), t)
 
   lines.filter(l => l.length).forEach((line, y) => {
     if (y > 0 && y < rows - 1) {

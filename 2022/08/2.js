@@ -6,7 +6,6 @@ export const read = file => {
 }
 
 const ints = l => l.split('').map(s => parseInt(s))
-const geIndex = (arr, t) => arr.findIndex(x => x >= t)
 
 const solve = lines => {
   let cols = lines[0].length
@@ -23,27 +22,14 @@ const solve = lines => {
     columns.push(c)
   }
 
-  const calcResult = (i, arr) => i > -1 ? i + 1 : arr.length
+  const getLength = (i, arr) => i > -1 ? i + 1 : arr.length
+  const greaterEqualIndex = (arr, t) => arr.findIndex(x => x >= t)
+  const rayLength = (arr, t) => getLength(greaterEqualIndex(arr, t), arr)
 
-  const up = (x, y, t) => {
-    const part = columns[x].slice(0, y).reverse()
-    return calcResult(geIndex(part, t), part)
-  }
-
-  const down = (x, y, t) => {
-    const part = columns[x].slice(y+1, rows)
-    return calcResult(geIndex(part, t), part)
-  }
-
-  const left = (x, y, t) => {
-    const part = ints(lines[y]).slice(0, x).reverse()
-    return calcResult(geIndex(part, t), part)
-  }
-
-  const right = (x, y, t) => {
-    const part = ints(lines[y]).slice(x+1, cols)
-    return calcResult(geIndex(part, t), part)
-  }
+  const up = (x, y, t) => rayLength(columns[x].slice(0, y).reverse(),t)
+  const down = (x, y, t) => rayLength(columns[x].slice(y+1, rows),t)
+  const left = (x, y, t) => rayLength(ints(lines[y]).slice(0, x).reverse(),t)
+  const right = (x, y, t) => rayLength(ints(lines[y]).slice(x+1, cols),t)
 
   lines.filter(l => l.length).forEach((line, y) => {
     for (let x = 0; x < cols; ++x) {
