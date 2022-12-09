@@ -75,10 +75,7 @@ const solve = lines => {
     for (let i = 0; i < amount; ++i) {
       moveHead(d, '0')
       for (let link = 1; link < 10; ++link) {
-        const a = ''+link-1
-        const b = ''+link
-        
-        moveTail(a, b)
+        moveTail(''+link-1, ''+link)
       }
       
       const [tx, ty] = snake['9']
