@@ -7,6 +7,7 @@ export const read = file => {
 
 const solve = lines => {
   const window = 14
+  let result = []
 
   lines.forEach(line => {
     line.split('').some((_, i) => {
@@ -14,14 +15,14 @@ const solve = lines => {
       if (part.length === window) {
         const letters = new Set(part)
         if (letters.size === window) {
-          console.log(i + window)
+          result.push(i + window)
           return true
         }
       }
     })
   })
   
-  return 0
+  return result
 }
 
 console.log(`Result: ${solve(read('test'))}`)
