@@ -81,7 +81,6 @@ const solve = lines => {
   }
 
   const inspections = monkeys.map(m => m.inspections).sort((a, b) => b - a)
-  console.log(monkeys)
   return inspections[0] * inspections[1]
 }
 
