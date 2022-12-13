@@ -46,7 +46,6 @@ const solve = lines => {
     if (1 !== compare(JSON.parse(l), JSON.parse(r))) {
       rights.push(i+1)
     }
-    ++i
   })
 
   return sum(rights)
