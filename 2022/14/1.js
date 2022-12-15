@@ -38,6 +38,17 @@ const solve = lines => {
     }
   }
 
+  const get = (y, x) => {
+    if (!cave[y])
+      cave[y] = {}
+    return cave[y][x]
+  }
+
+  const set = (y, x, c) => {
+    get(y, x)
+    cave[y][x] = c
+  }
+
   let MinX = 999999
   let MaxX = 0
   let MinY = 999999
@@ -58,7 +69,7 @@ const solve = lines => {
     }
   }
 
-  const foo = a => {
+  const createPath = a => {
     const [ fx, fy ] = a[0]
     const [ tx, ty ] = a[1]
 
@@ -71,10 +82,7 @@ const solve = lines => {
       const fromx = Math.min(fx, tx)
       const tox = Math.max(fx, tx)
       for (let x = fromx; x <= tox; ++x) {
-        if (!cave[fy]) {
-          cave[fy] = {}
-        }
-        cave[fy][x] = '#'
+        set(fy, x, '#')
       }
     }
 
@@ -82,26 +90,52 @@ const solve = lines => {
       const fromy = Math.min(fy, ty)
       const toy = Math.max(fy, ty)
       for (let y = fromy; y <= toy; ++y) {
-        if (!cave[y]) {
-          cave[y] = {}
-        }
-        cave[y][fx] = '#'
+        set(y, fx, '#')
       }
     }
 
     fy === ty ? hor() : ver()
   }
 
+  const _blocked = c => c === '#' || c === 'o'
+  const isBlocked = (y, x) => _blocked(get(y, x))
+
+  const isOOB = (y, x) => y < 0 || y > MaxY || x < 0 || x > MaxX
+
+  const drop = (y, x) => {
+    while (true) {
+      y++
+      if (isOOB(y, x)) return false
+      if (!isBlocked(y, x)) continue
+      
+      x -= 1
+      if (isOOB(y, x)) return false
+      if (!isBlocked(y, x)) continue
+      
+      x += 2
+      if (isOOB(y, x)) return false
+      if (!isBlocked(y, x)) continue
+
+      set(--y, --x, 'o')
+      return true
+    }
+  }
+
   lines.filter(hasLength).forEach(l => {
     const path = ints(l)
 
+    // make cave
     slidingWindow(path, 2)
       .filter(allValid)
-      .forEach(foo)
+      .forEach(createPath)
   })
 
-  print()
-  return 0
+  let resting = 0
+  while (drop(0, 500)) {
+    resting++
+  }  
+  //print()
+  return resting
 }
 
 console.log(`Result: ${solve(read('test'))}`)
