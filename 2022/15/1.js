@@ -35,19 +35,19 @@ const sweep = (a,b,c,d,y) => {
 }
 
 const solve = (row, lines) => {
-  let set = new Set()
-  let pp = new Set()
+  let xs = new Set()
+  let beacons = new Set()
   lines.filter(nonEmpty).forEach(l => {
     const [a,b,c,d] = ints(l)
 
     if (d === row)
-      pp.add(c)
+      beacons.add(c)
 
     const reaches = sweep(a,b,c,d,row)
-    reaches.forEach(r => set.add(r))
+    reaches.forEach(r => xs.add(r))
   })
 
-  return set.size - pp.size
+  return xs.size - beacons.size
 }
 
 console.log(`Result: ${solve(10, read('test'))}`)
