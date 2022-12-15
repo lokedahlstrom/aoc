@@ -69,14 +69,16 @@ const solve = lines => {
     }
   }
 
-  const createPath = a => {
+  const createPath = updateBoundaries => a => {
     const [ fx, fy ] = a[0]
     const [ tx, ty ] = a[1]
 
-    MinX = Math.min(MinX, fx, tx)
-    MaxX = Math.max(MaxX, fx, tx)
-    MinY = Math.min(MinY, fy, ty)
-    MaxY = Math.max(MaxY, fy, ty)
+    if (updateBoundaries) {
+      MinX = Math.min(MinX, fx, tx)
+      MaxX = Math.max(MaxX, fx, tx)
+      MinY = Math.min(MinY, fy, ty)
+      MaxY = Math.max(MaxY, fy, ty)
+    }
 
     const hor = () => {
       const fromx = Math.min(fx, tx)
@@ -97,26 +99,32 @@ const solve = lines => {
     fy === ty ? hor() : ver()
   }
 
-  const _blocked = c => c === '#' || c === 'o'
+  const _blocked = c => c === '#' || c === 'o' || c === '+'
   const isBlocked = (y, x) => _blocked(get(y, x))
 
-  const isOOB = y => y < 0 || y > MaxY
+  const isOOB = (y, x) => y <= 0 || y > MaxY
 
   const drop = (y, x) => {
+    // check if we replaced the + with sand in the previous step
+    if (get(0, x) !== '+')
+      return false
+
     while (true) {
       y++
-      if (isOOB(y)) return false
+
+      if (isOOB(y, x)) return false
       if (!isBlocked(y, x)) continue
       
       x -= 1
-      if (isOOB(y)) return false
+      if (isOOB(y, x)) return false
       if (!isBlocked(y, x)) continue
       
       x += 2
-      if (isOOB(y)) return false
+      if (isOOB(y, x)) return false
       if (!isBlocked(y, x)) continue
 
       set(--y, --x, 'o')
+      //console.log(++y, x)
       return true
     }
   }
@@ -127,8 +135,14 @@ const solve = lines => {
     // make cave
     slidingWindow(path, 2)
       .filter(allValid)
-      .forEach(createPath)
+      .forEach(createPath(true))
   })
+
+  // add extra room for me and the floor
+  MaxY+=2
+  const f = 999999 // infinity...
+  //create the floor
+  createPath(false)([[MinX-f, MaxY], [MaxX+f, MaxY]], false)
 
   let resting = 0
   while (drop(0, 500)) {
