@@ -6,27 +6,34 @@ export const read = file => {
 }
 
 const isDigit = c => c >= '0' && c <= '9'
-const digits = s => s.split('').filter(isDigit)
 const first = v => v.at(0)
 const last = v => v.at(-1)
+const range = n => [...Array(n).keys()]
 
-const replaceName = s => {
-  //handle overlapping digit names e.g. oneeighthree --> [1, 8, 3]
-  //string becomes one1oneight8eighthree3three
-  return s.replaceAll('one', 'one1one')
-    .replaceAll('two', 'two2two')
-    .replaceAll('three', 'three3three')
-    .replaceAll('four', 'four4four')
-    .replaceAll('five', 'five5five')
-    .replaceAll('six', 'six6six')
-    .replaceAll('seven', 'seven7seven')
-    .replaceAll('eight', 'eight8eight')
-    .replaceAll('nine', 'nine9nine')
+const names = [ 
+  'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 
+  '1', '2', '3', '4', '5', '6', '7', '8', '9'
+]
+
+const translate = s => {
+  const c = s.at(0)
+  if (isDigit(c))
+    return c
+  return names[names.indexOf(s) + 9]
 }
+
+const digits = s => range(s.length)
+  .reduce((acc, index) => [
+    ...acc, 
+    names
+      .filter(n => s.substring(index, index + n.length) === n)
+      .map(translate)]
+  , [])
+  .flat()
 
 const solve = lines => {  
   return lines.reduce((acc, l) => {
-    const d = digits(replaceName(l))
+    const d = digits(l)
     const num = Number(first(d) + last(d))
      
     return acc += isNaN(num) ? 0 : num
