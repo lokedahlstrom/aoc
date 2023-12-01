@@ -11,12 +11,11 @@ const first = v => v.at(0)
 const last = v => v.at(-1)
 
 const solve = lines => {
-  
   return lines.reduce((acc, l) => {
-     const d = digits(l)
-     const num = Number(first(d) + last(d))
+    const d = digits(l)
+    const num = Number(first(d) + last(d))
      
-     return acc += isNaN(num) ? 0 : num
+    return acc += isNaN(num) ? 0 : num
   }, 0)
 }
 
