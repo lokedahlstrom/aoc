@@ -11,6 +11,8 @@ const first = v => v.at(0)
 const last = v => v.at(-1)
 
 const replaceName = s => {
+  //handle overlapping digit names e.g. oneeighthree --> [1, 8, 3]
+  //string becomes one1oneight8eighthree3three
   return s.replaceAll('one', 'one1one')
     .replaceAll('two', 'two2two')
     .replaceAll('three', 'three3three')
