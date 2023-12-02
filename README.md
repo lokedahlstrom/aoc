@@ -1,7 +1,7 @@
 # Advent of Code
 
 Each day contains four files; `1.js` and `2.js` for the two tasks for the day, `test` for example data, and `data` for the actual input.
-Run the code with `node -r esm n.js` where `n` is 1 or 2.
+Run the code with `node -r esm n.js` where `n` is 1 or 2. Or simply run [bun](https://bun.sh) n.js.
 
 Helper functions exist in `helpers/index.js` 
 
