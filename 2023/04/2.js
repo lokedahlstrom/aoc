@@ -20,9 +20,9 @@ const solve = lines => {
 
       const inLeft = [...rs.intersection(ls)]
 
-        range(inLeft.length).forEach(n => {
-          cardCount[currentCard+1+n] += cardCount[currentCard]
-        })
+      range(inLeft.length).forEach(n => {
+        cardCount[currentCard+1+n] += cardCount[currentCard]
+      })
       
       return inLeft
     })
