@@ -15,8 +15,7 @@ const solve = lines => {
       const ls = new Set([...left])
       const rs = new Set([...right])
 
-      const inLeft = [...rs.intersection(ls)]
-      return inLeft
+      return [...rs.intersection(ls)]
     })
     .reduce((acc, list) => acc + power(list.length - 1), 0)
 }
