@@ -7,6 +7,7 @@ export const read = file => {
 
 const numbers = s => s.match(/\d+/g).map(s => Number(s))
 const range = n => [...Array(n).keys()]
+const sum = a =>  a.reduce((acc, i) => acc + i, 0)
   
 const solve = lines => {
   const cardCount = {}
@@ -27,7 +28,7 @@ const solve = lines => {
       return inLeft
     })
 
-  return Object.values(cardCount).reduce((acc, cur) => acc + cur, 0)
+  return sum(Object.values(cardCount))
 }
 
 console.log(`Result: ${solve(read('test'))}`)
