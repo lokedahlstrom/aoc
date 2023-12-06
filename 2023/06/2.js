@@ -7,7 +7,6 @@ export const read = file => {
 
 const range = n => [...Array(n).keys()]
 
-const numbers = s => s.match(/\d+/g).map(s => Number(s))
 const numberIgnoringSpaces = s => Number(s.substring(10).replaceAll(' ', ''))
 const winCount = (time, distance) =>
     range(time)
