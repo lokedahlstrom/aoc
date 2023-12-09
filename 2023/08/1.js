@@ -27,8 +27,6 @@ const solve = input => {
     current = destination
     ++i
   }
-
-  return 0
 }
 
 console.log(`Result: ${solve(read('test'))}`)
