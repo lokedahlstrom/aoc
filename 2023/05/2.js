@@ -20,6 +20,12 @@ class Range {
     return this.low >= other.low && this.high <= other.high
   }
 
+  overlaps(other) {
+    if (this.low >= other.low || this.high <= other.high) {
+      // make a new range that is inside other
+    }
+  }
+
   print() {
     return '[' + this.low + ', ' + this.high + ']'
   }
