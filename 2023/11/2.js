@@ -5,7 +5,6 @@ export const read = file => {
   return text.split('\n')
 }
 
-const insertAt = (s, i, c) => s.slice(0, i) + c + s.slice(i)
 const sum = (acc, x) => acc + x
 const splitString = a => a.split('')
 const getGalaxies = counter => (dict, r, y, expRow, expCol) => {
@@ -43,23 +42,6 @@ const uniquePairs = a => {
   return [...set]
 }
 
-const makeSquare = (lines, w) => {
-  let newLines = []
-  lines.forEach(l => {
-    if (l.length < w) {
-      l += (new Array(w - l.length).fill('.').join(''))
-    }
-    newLines.push(l)
-  })
-  return newLines
-}
-
-const widest = lines => {
-  let max = 0
-  lines.forEach(l => max = Math.max(max, l.length))
-  return max
-}
-
 const expandV = lines => {
   let indices = []
   for (let y = 0; y < lines[0].length; ++y) {
@@ -81,7 +63,6 @@ const expandH = lines => {
 }
 
 const solve = lines => {
-  const square = makeSquare(lines, widest(lines))
   const rowExpansionIndices = expandV(lines)
   const colExpansionIndices = expandH(lines)
   const matrix = lines.map(splitString)
