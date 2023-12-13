@@ -9,8 +9,7 @@ const rotateCCW = m => {
   let transposed = []
   for (let y in m) {
     for (let x in m[y]) {
-      transposed[x] = transposed[x] || "";
-      transposed[x] += m[y][x];
+      transposed[x] += m[y][x]
     }
   }
   return transposed
