@@ -5,8 +5,46 @@ const read = file => {
   return text.split('\n')
 }
 
+const get = (matrix, y, x) => {
+  const row = matrix.at(y)
+  if (!row) return '.'
+  return row.at(x) || '.'
+}
+
+const rowRockCount = row => row.filter(c => c === 'O').length
+
+const print = matrix => matrix.forEach((l, y) => {
+  console.log(l.join(''), (matrix.length - y) * rowRockCount(l))
+})
+
+const tilt = matrix => {
+  let moving = true
+  while (moving) {
+    moving = false
+    matrix.forEach((row, y) => {
+      if (y === 0)
+        return
+      row.forEach((c, x) => {
+        if (c === 'O') {
+          const above = matrix[y-1][x]
+          if (above === '.') {
+            moving = true
+            matrix[y-1][x] = 'O'
+            matrix[y][x] = '.'
+          }
+        }
+      })
+    })
+  }
+}
+
 const solve = lines => {
-  return 0
+  const matrix = lines.map(l => l.split(''))
+  tilt(matrix)
+  print(matrix)
+
+  const rows = matrix.length
+  return matrix.reduce((acc, row, i) => acc + (rows - i) * rowRockCount(row), 0)
 }
 
 console.log(`Result: ${solve(read('test'))}`)
