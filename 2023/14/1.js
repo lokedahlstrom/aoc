@@ -5,17 +5,7 @@ const read = file => {
   return text.split('\n')
 }
 
-const get = (matrix, y, x) => {
-  const row = matrix.at(y)
-  if (!row) return '.'
-  return row.at(x) || '.'
-}
-
 const rowRockCount = row => row.filter(c => c === 'O').length
-
-const print = matrix => matrix.forEach((l, y) => {
-  console.log(l.join(''), (matrix.length - y) * rowRockCount(l))
-})
 
 const tilt = matrix => {
   let moving = true
@@ -41,7 +31,6 @@ const tilt = matrix => {
 const solve = lines => {
   const matrix = lines.map(l => l.split(''))
   tilt(matrix)
-  print(matrix)
 
   const rows = matrix.length
   return matrix.reduce((acc, row, i) => acc + (rows - i) * rowRockCount(row), 0)
