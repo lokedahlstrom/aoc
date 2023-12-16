@@ -21,15 +21,15 @@ const isW = dir => isDir(dir, W)
 const isN = dir => isDir(dir, N)
 const isS = dir => isDir(dir, S)
 
-const get = (matrix, y, x) => {
+const getValue = (matrix, [y, x]) => {
   const row = matrix.at(y)
   if (!row) return undefined
   return row.at(x) || undefined
 }
 
-const nextCell = (y, x, dir) => [y + dir[0], x + dir[1]]
+const getNextCell = ([y, x], dir) => [y + dir[0], x + dir[1]]
 
-const nextDir = (dir, nextCell) => {
+const getNextDir = (dir, nextCell) => {
   switch (nextCell) {
     case '|':
       if (isE(dir) || isW(dir))
@@ -61,27 +61,39 @@ const nextDir = (dir, nextCell) => {
     default: return [dir]
   }
 }
-const getKey = (y, x) => '' + y + '|' + x
-const isVisited = (d, y, x) => getKey(y, x) in d
-const visit = (d, y, x) => d[getKey(y, x)] = true
+const getKey = (y, x, dir) => '' + y + '|' + x + '|' + dirToString(dir)
+const isVisited = (d, [y, x], dir) => getKey(y, x, dir) in d
+const visit = (d, [y, x], dir) => d[getKey(y, x, dir)] = true
+const dirToString = d => isE(d) ? 'E' : isW(d) ? 'W' : isN(d) ? 'N' : 'S'
+const isValid = (m, [x, y]) => y >= 0 && y < m.length && x >= 0 && x < m[0].length
 
-const beam = (matrix, visited, y, x, dir) => {
-  const c = get(matrix, y, x)
+const beam = (matrix, energized, visited, startPos, startDir) => {
+  let queue = [[startPos, startDir]]
 
-  if (isVisited(visited, y, x) || c === undefined) {
-    return
+  while (queue.length) {
+    const [curPos, curDir] = queue.pop()
+    const value = getValue(matrix, curPos)
+    console.log('Current', value, 'at', curPos, dirToString(curDir[0]))
+
+    if (!isValid(matrix, curPos))
+      continue
+
+    if (isVisited(visited, curPos, curDir[0]))
+      continue
+
+    visit(visited, curPos, curDir[0])
+    energized[curPos[0]+'|'+curPos[1]] = true
+
+    const nextPos = getNextCell(curPos, curDir[0])
+    const nextValue = getValue(matrix, nextPos)
+    const nextDir = getNextDir(curDir[0], nextValue)
+    console.log('Going to', nextValue, 'at', nextPos, 'next dir(s)', nextDir.map(d => dirToString(d)))
+
+    nextDir.forEach(dir => {
+      console.log('Pushing', nextValue, 'at', nextPos, dirToString(dir))
+      queue.push([nextPos, [dir]])
+    })
   }
-  
-  const ndir = nextDir(dir, c)
-  ndir.forEach(d => {
-    const [ny, nx] = nextCell(y, x, d)
-    if (ny < 0 || ny >= matrix.length || x < 0 || x >= matrix[0].length) {
-      visit(visited, y, x)
-      return
-    }
-    beam(matrix, visited, ny, nx, d)
-    visit(visited, y, x)
-  })
 }
 
 const solve = lines => {
@@ -89,16 +101,15 @@ const solve = lines => {
   // print(matrix)
 
   const energized = {}
-  visit(energized, 0, 0)
-  const [y, x] = nextCell(0, 0, E)
-  beam(matrix, energized, y, x, E)
+  //visit(energized, [0, 0])
+  beam(matrix, energized, {}, [0, 0], [S])
 
   // console.log(energized)
 
   matrix.forEach((r, y) => {
     let l = ''
     r.forEach((c, x) => {
-      if (isVisited(energized, y, x))
+      if (isVisited(energized, [y, x]))
         l += '#'
       else
         l += c
