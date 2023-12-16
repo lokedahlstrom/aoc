@@ -83,10 +83,8 @@ const beam = (matrix, energized, visited, startPos, startDir) => {
     const nextPos = getNextCell(curPos, curDir[0])
     const nextValue = getValue(matrix, nextPos)
     const nextDir = getNextDir(curDir[0], nextValue)
-    // console.log('Going to', nextValue, 'at', nextPos, 'next dir(s)', nextDir.map(d => dirToString(d)))
 
     nextDir.forEach(dir => {
-      // console.log('Pushing', nextValue, 'at', nextPos, dirToString(dir))
       queue.push([nextPos, [dir]])
     })
   }
@@ -99,17 +97,6 @@ const solve = (lines, part) => {
   // change the actual direction in your input ([S])
   // can't bother to fix this in code
   beam(matrix, energized, {}, [0, 0], part === 1 ? [E] : [S])
-
-  matrix.forEach((r, y) => {
-    let l = ''
-    r.forEach((c, x) => {
-      if (isVisited(energized, [y, x]))
-        l += '#'
-      else
-        l += c
-    })
-    console.log(l)
-  })
 
   return sum(values(energized))
 }
