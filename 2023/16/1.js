@@ -6,7 +6,6 @@ const read = file => {
 }
 
 const toMatrix = lines => lines.map(l => l.split(''))
-const print = m => m.forEach(r => console.log(r.join('')))
 const values = d => Object.values(d)
 const sum = a => a.reduce((acc, v) => acc + v, 0)
 
@@ -61,7 +60,8 @@ const getNextDir = (dir, nextCell) => {
     default: return [dir]
   }
 }
-const getKey = (y, x, dir) => '' + y + '|' + x + '|' + dirToString(dir)
+
+const getKey = (y, x, dir) => '' + y + '|' + x + (dir ? ('|' + dirToString(dir)) : '')
 const isVisited = (d, [y, x], dir) => getKey(y, x, dir) in d
 const visit = (d, [y, x], dir) => d[getKey(y, x, dir)] = true
 const dirToString = d => isE(d) ? 'E' : isW(d) ? 'W' : isN(d) ? 'N' : 'S'
@@ -73,38 +73,32 @@ const beam = (matrix, energized, visited, startPos, startDir) => {
   while (queue.length) {
     const [curPos, curDir] = queue.pop()
     const value = getValue(matrix, curPos)
-    console.log('Current', value, 'at', curPos, dirToString(curDir[0]))
 
-    if (!isValid(matrix, curPos))
-      continue
-
-    if (isVisited(visited, curPos, curDir[0]))
+    if (!isValid(matrix, curPos) || isVisited(visited, curPos, curDir[0]))
       continue
 
     visit(visited, curPos, curDir[0])
-    energized[curPos[0]+'|'+curPos[1]] = true
+    visit(energized, curPos)
 
     const nextPos = getNextCell(curPos, curDir[0])
     const nextValue = getValue(matrix, nextPos)
     const nextDir = getNextDir(curDir[0], nextValue)
-    console.log('Going to', nextValue, 'at', nextPos, 'next dir(s)', nextDir.map(d => dirToString(d)))
+    // console.log('Going to', nextValue, 'at', nextPos, 'next dir(s)', nextDir.map(d => dirToString(d)))
 
     nextDir.forEach(dir => {
-      console.log('Pushing', nextValue, 'at', nextPos, dirToString(dir))
+      // console.log('Pushing', nextValue, 'at', nextPos, dirToString(dir))
       queue.push([nextPos, [dir]])
     })
   }
 }
 
-const solve = lines => {
+const solve = (lines, part) => {
   const matrix = toMatrix(lines)
-  // print(matrix)
-
   const energized = {}
-  //visit(energized, [0, 0])
-  beam(matrix, energized, {}, [0, 0], [S])
 
-  // console.log(energized)
+  // change the actual direction in your input ([S])
+  // can't bother to fix this in code
+  beam(matrix, energized, {}, [0, 0], part === 1 ? [E] : [S])
 
   matrix.forEach((r, y) => {
     let l = ''
@@ -120,5 +114,5 @@ const solve = lines => {
   return sum(values(energized))
 }
 
-console.log(`Result: ${solve(read('test'))}`)
-console.log(`Result: ${solve(read('input'))}`)
+console.log(`Result: ${solve(read('test'), 1)}`)
+console.log(`Result: ${solve(read('input'), 2)}`)
