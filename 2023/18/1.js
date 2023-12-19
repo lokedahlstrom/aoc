@@ -7,6 +7,7 @@ const read = file => {
 
 const getKey = ([y, x]) => '' + y + '|' + x
 const range = n => [...Array(n).keys()]
+const isEven = n => n % 2 === 0
 
 const L = [ 0, -1]
 const R = [ 0,  1]
@@ -38,17 +39,22 @@ const solve = lines => {
     })
   })
 
-  let isInside = false
+  let sum = 0//Object.keys(dug).length
   for (let r = 0; r <= maxY; ++r) {
     let l = ''
+    let udCount = 0
     for (let c = 0; c <= maxX; ++c) {
       const o = dug[getKey([r, c])]
-      l += o ? o.dir : '.'
+      if (o) {
+        udCount += (o.dir === 'U' || o.dir === 'D') ? 1 : 0
+      }
+      l += o ? o.dir : !isEven(udCount) ? '#' : '.'
     }
+    sum += l.split('').filter(c => c !== '.').length
     console.log(l)
   }
 
-  return 0
+  return sum
 }
 
 console.log(`Result: ${solve(read('/Users/loke/source/github/aoc/2023/18/test'))}`)
