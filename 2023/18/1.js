@@ -7,7 +7,6 @@ const read = file => {
 
 const getKey = ([y, x]) => '' + y + '|' + x
 const range = n => [...Array(n).keys()]
-const isEven = n => n % 2 === 0
 
 const L = [ 0, -1]
 const R = [ 0,  1]
@@ -24,38 +23,68 @@ const solve = lines => {
   let x = 0
   let maxY = 1
   let maxX = 1
+  let minY = 0
+  let minX = 0
+  let sum = 0
 
   lines.forEach(l => {
     const [_, dir, steps, color] = new RegExp(/(\w) (\d+) (\(\#\w+\))/g).exec(l)
 
-    console.log(dir, steps)
-
     const d = getDir(dir, steps)
-    range(Number(steps)).forEach(() => {
+    range(Number(steps)).forEach(n => {
       [y, x] = addPos([y, x], d)
       maxY = Math.max(maxY, y)
       maxX = Math.max(maxX, x)
+      minY = Math.min(minY, y)
+      minX = Math.min(minX, x)
       dug[getKey([y, x])] = { dir, color }
     })
   })
 
-  let sum = 0//Object.keys(dug).length
-  for (let r = 0; r <= maxY; ++r) {
+  // create the matrix
+  let matrix = []
+  for (let r = minY; r <= maxY; ++r) {
     let l = ''
-    let udCount = 0
-    for (let c = 0; c <= maxX; ++c) {
+    for (let c = minX; c <= maxX; ++c) {
       const o = dug[getKey([r, c])]
-      if (o) {
-        udCount += (o.dir === 'U' || o.dir === 'D') ? 1 : 0
-      }
-      l += o ? o.dir : !isEven(udCount) ? '#' : '.'
+      l += o ? o.dir : '.'
     }
     sum += l.split('').filter(c => c !== '.').length
-    console.log(l)
+    matrix.push(l)
   }
 
-  return sum
+  // "flood fill" it
+  let startX = matrix[1].indexOf('U') + 1
+  let queue = [[1, startX]]
+  let visited = new Set()
+
+  while (queue.length) {
+    var pos = queue.pop()
+
+    if (matrix[pos[0]][pos[1]] !== '.')
+      continue
+
+    visited.add(getKey(pos))
+
+    const l = addPos(pos, L)
+    if (!visited.has(getKey(l)))
+      queue.push(l)
+  
+    const r = addPos(pos, R)
+    if (!visited.has(getKey(r)))
+      queue.push(r)
+
+    const u = addPos(pos, U)
+    if (!visited.has(getKey(u)))
+      queue.push(u)
+
+    const d = addPos(pos, D)
+    if (!visited.has(getKey(d)))
+      queue.push(d)
+  }
+
+  return sum + visited.size
 }
 
 console.log(`Result: ${solve(read('/Users/loke/source/github/aoc/2023/18/test'))}`)
-// console.log(`Result: ${solve(read('input'))}`)
+console.log(`Result: ${solve(read('/Users/loke/source/github/aoc/2023/18/input'))}`)
