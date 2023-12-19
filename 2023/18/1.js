@@ -86,5 +86,5 @@ const solve = lines => {
   return sum + visited.size
 }
 
-console.log(`Result: ${solve(read('/Users/loke/source/github/aoc/2023/18/test'))}`)
-console.log(`Result: ${solve(read('/Users/loke/source/github/aoc/2023/18/input'))}`)
+console.log(`Result: ${solve(read('test'))}`)
+console.log(`Result: ${solve(read('input'))}`)
